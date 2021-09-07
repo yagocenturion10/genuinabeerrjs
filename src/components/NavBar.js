@@ -1,5 +1,5 @@
 
-
+import CartWidget from './components/CardWidget'
 
 const NavBar = () => {
   
@@ -25,6 +25,10 @@ const NavBar = () => {
             </li>
           </ul>
           <ul className="navbar-nav nav-flex-icons">
+
+           <CartWidget />
+
+
             <li className="nav-item">
               <a href="https://www.facebook.com/genuina.beer" target="_blank" className="nav-link"><i className="fab fa-facebook-f" /></a>
             </li>
@@ -40,6 +44,10 @@ const NavBar = () => {
     </header>
     
     )
+    }
+
+    function ItemListContainer () {
+      <h1>Este texto luego sera reemplazado por mi catalogo</h1>
     }
 
 export default NavBar
