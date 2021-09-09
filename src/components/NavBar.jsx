@@ -1,7 +1,14 @@
+import React from 'react';
+import "./nav.css";
+import {CardWidget} from "../components/CardWidget"
 
-import CartWidget from './components/CardWidget'
 
-const NavBar = () => {
+
+export const NavBar = () => {
+  
+ // const miStock = 10
+ // const [count, setCount ] = useState (0)
+
   
     return (
     
@@ -26,7 +33,7 @@ const NavBar = () => {
           </ul>
           <ul className="navbar-nav nav-flex-icons">
 
-           <CartWidget />
+           <CardWidget/>
 
 
             <li className="nav-item">
@@ -46,8 +53,5 @@ const NavBar = () => {
     )
     }
 
-    function ItemListContainer () {
-      <h1>Este texto luego sera reemplazado por mi catalogo</h1>
-    }
 
 export default NavBar
