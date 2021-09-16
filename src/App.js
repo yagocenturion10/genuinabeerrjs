@@ -1,31 +1,32 @@
-
 import logo from './logo.svg';
 import './App.css';
-import {NavBar} from "./components/NavBar"
-import { ItemListContainer } from './components/ItemListContainer';
+import {NavBar} from "./NavBar"
+import { ItemListContainer } from './ItemListContainer';
 
 
 
-//const App = () => {
-  //const [count, setCount]  = useState (0)
-
-function App () {
-
+function App() {
   return (
     <div className="App">
-      <header>
+      <header className="App-header">
+        <img src={logo} className="App-logo" alt="logo" />
+        <p>
+          Edit <code>src/App.js</code> and save to reload.
+        </p>
+        <a
+          className="App-link"
+          href="https://reactjs.org"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Learn React
+        </a>
         <NavBar/>
         <ItemListContainer saludo="¡Bienvenido!"/>
+        
       </header>
-   
-
-    <itemCount/>
-
-    <img scr={logo} className="App-logo" alt="logo" />
-
     </div>
   );
 }
 
 export default App;
-
