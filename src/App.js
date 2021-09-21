@@ -1,82 +1,89 @@
-import { useState, useEffect } from 'react';
-import logo from './logo.svg';
+import React from 'react';
+import { useState} from 'react';
 import './App.css';
-import {NavBar} from "./NavBar"
-import { ItemListContainer } from './ItemListContainer';
+import './Estilos.scss';
+import { BrowserRouter, Switch, Route } from 'react-router-dom';
+import MiNavBar from './MiNavBar'
+import Contact from './views/Contact';
+import Products from './views/Products';
+import ItemListContainer from './views/ItemListContainer';
 
 
-
-
-const productos = [
-
-  {
-    precio: 5000,
-   id: '1',
-    title: 'Barril 10L',
-
-  },
-  {
-    precio: 7000,
-   id: '2',
-    title: 'Barril 30L',
-
-  },
-  {
-    precio: 15000,
-    id: '3',
-     title: 'Barril 50L',
-
-  }
-]
-
-function getList() {
-return new Promise ((resolve, reject) => {
-  setTimeout(() => resolve(productos), 15000)
-})
-}
 
 const App = () => {
 
-const [listBirra, setListBirra] = useState ([]) 
+  const [productos, setProductos] = useState ([])
+  const [input, setInput] = useState ('')
 
-useEffect (() => {
 
-const list = getList()
+const handleForm = (event) => {
 
-  list.then(list => {
-    setListBirra(list)
+  event.preventDefault()
 
+  fetch (`https://api.mercadolibre.com/sites/MLA/search?q=${input}`)
+
+  .then(res => {return res.json ()})
+  
+  .then( function (respuesta) { 
+    setProductos(respuesta.results.slice(0,10))
   })
-
-  
-}, [])
-
-
-
-
-return (
-  <div className="App">
-    <header>
-
-    
-
-      <ItemListContainer saludo="¡Bienvenido!"/>
-
-    </header>
- <div>
-   <ul>
-   {productos.map(beer => <li key={beer.id}>{beer.title}</li>)}
-   </ul>
- </div>
-
-  <itemCount/>
-  
-  <img scr={logo} className="App-logo" alt="logo" />
-
-  </div>
-);
 }
 
+
+
+
+  return (
+
+   <div className="App">
+    <BrowserRouter>
+      <MiNavBar/>
+
+        <Switch>
+
+          <Route exact path='/'>
+              <ItemListContainer/>
+          </Route>
+
+          <Route  path='/ItemListContainer/'>
+              <ItemListContainer/>
+          </Route>
+
+          <Route path='/products'>
+            <Products/>
+          </Route>
+
+          <Route path='/contact'>
+            <Contact/>
+          </Route>
+
+        </Switch>
+    </BrowserRouter>
+
+   
+
+<>
+
+
+  
+</>
+
+
+    <div>
+          <form onSubmit={handleForm}>
+            <input type='text' onChange={(event) => setInput(event.target.value)} />
+            <button type='submit'>Buscar</button>  
+          </form>
+    </div>
+    
+
+     
+
+
+   </div>
+
+
+  
+);}
 
 
 export default App;
