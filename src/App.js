@@ -1,89 +1,35 @@
 import React from 'react';
-import { useState} from 'react';
 import './App.css';
-import './Estilos.scss';
+import Navbar from './components/navbar/Navbar.js';
+import Home from './components/home/Home.js';
+import ItemDetailContainer from './components/ItemDetailContainer.js';
+import Cart from './components/Cart.js';
+import Footer from './components/Footer.js';
 import { BrowserRouter, Switch, Route } from 'react-router-dom';
-import MiNavBar from './MiNavBar'
-import Contact from './views/Contact';
-import Products from './views/Products';
-import ItemListContainer from './views/ItemListContainer';
+import { CartProvider } from './context/cartContext.js';
 
-
-
-const App = () => {
-
-  const [productos, setProductos] = useState ([])
-  const [input, setInput] = useState ('')
-
-
-const handleForm = (event) => {
-
-  event.preventDefault()
-
-  fetch (`https://api.mercadolibre.com/sites/MLA/search?q=${input}`)
-
-  .then(res => {return res.json ()})
-  
-  .then( function (respuesta) { 
-    setProductos(respuesta.results.slice(0,10))
-  })
-}
-
-
-
-
+function App() {  
   return (
-
-   <div className="App">
-    <BrowserRouter>
-      <MiNavBar/>
-
-        <Switch>
-
-          <Route exact path='/'>
-              <ItemListContainer/>
-          </Route>
-
-          <Route  path='/ItemListContainer/'>
-              <ItemListContainer/>
-          </Route>
-
-          <Route path='/products'>
-            <Products/>
-          </Route>
-
-          <Route path='/contact'>
-            <Contact/>
-          </Route>
-
-        </Switch>
+  <CartProvider>
+   <BrowserRouter>
+    	<div className="App">
+      		    <Navbar />
+          		<Switch>
+          			<Route exact path='/'>
+      		      		<Home />
+      		      	</Route>
+      		      	<Route path='/item/:id'>
+      		      		<ItemDetailContainer />
+      		      	</Route>
+      		      	<Route path='/cart'>
+      		      		<Cart />
+      		      	</Route>
+          		</Switch>
+          		<Footer />
+    	</div>
     </BrowserRouter>
-
-   
-
-<>
-
-
-  
-</>
-
-
-    <div>
-          <form onSubmit={handleForm}>
-            <input type='text' onChange={(event) => setInput(event.target.value)} />
-            <button type='submit'>Buscar</button>  
-          </form>
-    </div>
-    
-
-     
-
-
-   </div>
-
-
-  
-);}
-
+  </CartProvider>
+  );
+}
 
 export default App;
