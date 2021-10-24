@@ -18,6 +18,7 @@ const style = {
 		heigth: 200,
 		marginRight: 'auto',
 		marginLeft: 'auto',
+		borderWidth: 0,
 	},
 }
 
@@ -37,7 +38,7 @@ const Item = function({id, name, brand, price, initial, min, max, image}){
 					initial={initial} 
 					text="Agregar al carrito"
 					productId = {id}
-					name={name}/>
+					name={name} />
 			</div>
 		);
 }

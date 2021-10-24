@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect } from 'react';
 import BuyButton from './BuyButton.js';
 
 const style = {
@@ -12,28 +12,42 @@ const style = {
 }
 
 const ItemCount = function({ max, min, initial, onAdd, text, getQuantity }){
-
-	const [counter, setCounter] = useState(initial);
-
-	const removeItem = function(){
-		if(counter > min){
-			const count = counter - 1;
-			setCounter(count);
-			{getQuantity(count)};
-		} else{
-			console.log('Se llegó al límite minimo')
+	const [counter, setCounter] = useState(null);
+	const [maximo, setMaximo] = useState(null);
+	const [minimo, setMinimo] = useState(null);
+	const [alertMin, setAlertMin ] = useState(false);
+	const [alertMax, setAlertMax ] = useState(false);
+	
+		const removeItem = function(){
+			if(counter > min){
+				const count = counter - 1;
+				setCounter(count);
+				{getQuantity(count)};
+			} else{
+				setAlertMin(true);
+				setTimeout(function(){ setAlertMin(false); }, 2000);
+			}
 		}
-		//counter > min ? setCounter(counter-1) : console.log('Se llegó al límite minimo');
-	}
-
-	const addItem = function(){
-		if(counter < max){
-			setCounter(counter+1);
-			{getQuantity(counter+1)}
-		} else {
-			console.log('Se llegó al límite máximo')
+		const addItem = function(){
+			if(counter < max){
+				setCounter(counter+1);
+				{getQuantity(counter+1)}
+			} else {
+				setAlertMax(true);
+				setTimeout(function(){ setAlertMax(false); }, 2000);
+			}
 		}
-		//counter < max ? setCounter(counter+1) : console.log('Se llegó al límite máximo');
+
+	useEffect(() => {
+		setCounter(initial);
+		setMaximo(max);
+		setMinimo(min);
+	}, [initial, max, min]);
+
+	const style = {
+		alert: {
+			color: 'red',
+		}
 	}
 
 	return(
@@ -54,6 +68,8 @@ const ItemCount = function({ max, min, initial, onAdd, text, getQuantity }){
   						</a>
   					</div>
   				</div>
+  				{alertMin && <div className="container"><small style={style.alert}>Se alcanzó el pedido mínimo</small></div>}
+  				{alertMax && <div className="container"><small style={style.alert}>Se alcanzó el pedido máximo</small></div>}
   			</div>
 		</>
 		);

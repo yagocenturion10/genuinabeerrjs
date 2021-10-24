@@ -1,4 +1,4 @@
-import React, {useState, useContext} from 'react';
+import React, {useState, useContext, useEffect } from 'react';
 import { CartContext, useCartContext } from '../context/cartContext.js';
 import { Link } from "react-router-dom";
 
@@ -8,10 +8,24 @@ const style = {
 	}
 }
 
-const CheckoutDetail = function(){
+const CheckoutDetail = function({getItems, getTotal}){
 	const { items, addToCart, removeItem } = useCartContext();
 
-	return <table className="table table-striped">
+	const calculateTotal = function(elements){
+		let total = 0;
+		elements.map((element) => {
+			total += element.quantity * element.price;
+		});
+
+		return total;
+	}
+
+	useEffect(() => {
+		getItems(items);
+		getTotal(calculateTotal(items));
+	}, [items]);	
+
+	return <><table className="table table-striped">
 						  <thead>
 						    <tr>
 						      <th scope="col">Producto</th>
@@ -28,17 +42,20 @@ const CheckoutDetail = function(){
 						    <tr>
 						      <td><p>{item.name}</p></td>
 						      <td><p>{item.quantity}</p></td>
-						      <td><p>{item.price}</p></td>
-						      <td><p>{item.quantity * 10}</p></td>
+						      <td><p>$ {item.price}</p></td>
+						      <td><p>$ {item.quantity * item.price}</p></td>
 						      <td>
-						      	<i style={style.icon} onClick={() => removeItem(item.productId)} className="fa fa-trash"></i>
+						      	<i style={style.icon} 
+						      	onClick={() => removeItem(item.productId)} 
+						      	className="fa fa-trash">
+						      	</i>
 						      </td>
 						    </tr>
 						  	) :
 						  	<tr>
 						  		<td colspan="5">
 							  		<div class="alert alert-info" role="alert">
-	  									Todavía no agregaste productos al carrito.
+	  									Oops! Todavía no agregaste productos al carrito.
 	  									<Link className="btn btn-info mt-2" to="/">Comprar productos</Link>
 									</div>
 						  		</td>
@@ -46,6 +63,10 @@ const CheckoutDetail = function(){
 						  }
 						  </tbody>
 						</table>
+						<div className="text-center">
+							<h5>Total $ {calculateTotal(items)}</h5>
+						</div>
+						</>
 }
 
 export default CheckoutDetail;

@@ -1,47 +1,55 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 
-const CheckoutForm = function(){
-	return <form>
+const CheckoutForm = function({getUserData, buyButton, createOrder}){
+
+	const [ emails, setEmails ] = useState([]);
+	const [ error, setError ] = useState(null);
+
+	const checkMails = function(){
+		console.log('check');
+		if(emails.email === emails.email_2){
+			setError(false);
+		} else {
+			setError(true);
+		}
+	}
+
+	const getEmailData = function(evt){
+		setEmails({...emails, [evt.target.id]: evt.target.value});
+	}
+
+	useEffect(() => {
+		if(emails.email_2 && emails.email_2 != ''){			
+			checkMails();
+		}
+	}, [emails]);
+
+	return 				<>
 						  <div className="form-row">
 						    <div className="form-group col-md-6">
 						      <label for="name">Nombre</label>
-						      <input type="text" className="form-control" id="name" />
+						      <input onChange={getUserData} type="text" className="form-control" id="name" />
 						    </div>
 						    <div className="form-group col-md-6">
-						      <label for="lastname">Apellido</label>
-						      <input type="text" className="form-control" id="lastname" />
+						      <label for="phone">Teléfono</label>
+						      <input onChange={getUserData} type="number" className="form-control" id="phone" />
 						    </div>
 						  </div>
 						  <div className="form-group">
-						    <label for="email">Email</label>
-						    <input type="email" className="form-control" id="email" />
+						  	<div className="row">
+						  		<div className="col">
+							    	<label for="email">Email</label>
+							    	<input onChange={(e) => {getUserData(e); getEmailData(e)} } type="email" className="form-control" id="email" />
+						  		</div>
+						  		<div className="col">
+							    	<label for="email_2">Confirmar Email</label>
+							    	<input onChange={(e) => {getUserData(e); getEmailData(e)} } type="email" className="form-control" id="email_2" />
+						  		</div>
+						  	</div>
 						  </div>
-						  <div className="form-group">
-						    <label for="adress">Dirección</label>
-						    <input type="text" className="form-control" id="adress" placeholder="Escriba aqui su dirección" />
-						  </div>
-						  <div className="form-row">
-						    <div className="form-group col-md-6">
-						      <label for="city">Ciudad</label>
-						      <input type="text" className="form-control" id="city" />
-						    </div>
-						    <div className="form-group col-md-4">
-						      <label for="state">Provincia</label>
-						      <select id="state" className="form-control">
-						        <option selected>Seleccionar..</option>
-						        <option>Capital Federral</option>
-						        <option>Provincia de Buenos Aires</option>
-								<option>Interior del Pais</option>
-
-						      </select>
-						    </div>
-						    <div className="form-group col-md-2">
-						      <label for="zip">CP</label>
-						      <input type="text" className="form-control" id="zip" />
-						    </div>
-						  </div>
-						  <button type="submit" className="btn btn-primary">REALIZAR PEDIDO</button>
-						</form>
-}
+						  {error && <p>Los emails deben ser iguales</p>}
+						  <button disabled={buyButton} onClick={createOrder} className="btn btn-primary">REALIZAR PEDIDO</button>
+						</>
+}						
 
 export default CheckoutForm;

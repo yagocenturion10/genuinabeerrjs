@@ -1,84 +1,61 @@
 import React, { useEffect, useState } from 'react';
 import Loading from './Loading.js';
 import ItemDetail from './ItemDetail.js'
+import { Link } from 'react-router-dom';
 import { useParams } from 'react-router-dom';
-
-const products = [
-
-	
-{
-	id:'1', 
-	name: 'Red Ale', 
-	brand: 'GenuinaBeer', 
-	price: 450, 
-	initial: 1, 
-	min: 1, 
-	max: 50, 
-	image: 'data:image/jpeg;base64,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'
-},
-{
-	id:'2', 
-	name: 'Session IPA', 
-	brand: 'GenuinaBeer', 
-	price: 500, 
-	initial: 1, 
-	min: 1, 
-	max: 50,
-	image: 'https://img.favpng.com/11/14/23/india-pale-ale-spiegelau-2-pack-beer-classics-ipa-glass-stout-beer-glasses-png-favpng-Jn3RJCEZbpntXnkxWG42pdVkg.jpg'
-},
-{
-	id:'3', 
-	name: 'Imperial Stout', 
-	brand: 'GenuinaBeer', 
-	price: 400, 
-	initial: 1, 
-	min: 1, 
-	max: 50, 
-	image: 'data:image/jpeg;base64,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'
-}
-
-];
-
-const getItems = function(id){
-	const product = products.filter(prod => id === prod.id);
-	return product;
-}
+import { getFirestore } from '../firebase';
 
 const ItemDetailContainer = function(){
 
 const [ item, setItem ] = useState([]);
 const [ loading, setLoading] = useState(true);
+const [ error, setError ] = useState(false);
 const { id } = useParams();
 
 useEffect( () => {
-	const task = new Promise( ( resolve, reject ) => {
-		setTimeout(() => {
-				resolve(getItems(id));
-			}, 3000)});
+	const db = getFirestore();
 
-	task.then(
-		res => {
-			setItem(res);
-			setLoading(false)
-		},
-		err => {console.log(err)},
-		);
+		const itemCollection = db.collection('items');
+		const product = itemCollection.doc(id);
+
+		product.get().then((doc)=>{
+			if(doc.data() === undefined){
+				setLoading(false);
+				setError(true);
+			} else{
+				setLoading(false);
+				setItem({ id: doc.id, ...doc.data() });
+			}
+		});
 
 	}, [id]);
 
 	return(<div>
-		{ loading && <Loading />}
-		{item.map(it => 
-		<ItemDetail
-		id={it.id}
-		name={it.name}
-		brand={it.brand}
-		price={it.price}
-		initial={it.initial}
-		max={it.max}
-		min={it.min}
-		image={it.image}
-		 />)}
+		{	loading ? 
+			<Loading /> : error ? <>
+								  <div className="container p-3">
+									  <div className="alert alert-danger text-center" role="alert">
+	  									Oops! No pudimos encontrar el producto que estás buscando.
+									  </div>
+									  <div className="text-center">
+									  	<Link className="btn btn-info" to="/">
+									  	VOLVER AL CATÁLOGO
+									  	</Link>
+									  </div>
+								  </div>
+								  </>:
+								  <ItemDetail
+									id={item.id}
+									name={item.title}
+									brand={item.brand}
+									price={item.price}
+									description={item.description}
+									initial={item.initial}
+									max={item.stock}
+									min={item.min}
+									image={item.image_id}
+									/>
+		}
 		</div>);
 }
 

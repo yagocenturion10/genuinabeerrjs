@@ -7,10 +7,9 @@ export const useCartContext = () => useContext(CartContext);
 export const CartProvider = function({children}){
 	const [items, setItems] = useState([]);
 
-	const addToCart = function(name, quantity, id){
-		const item = [...items, {'productId': id, 'name': name, 'quantity': quantity}];
+	const addToCart = function(name, quantity, id, price){
+		const item = [...items, {'productId': id, 'name': name, 'quantity': quantity, 'price': price}];
 		setItems(item);
-		console.log(items);
 	}
 
 	const removeItem = function(id){
@@ -22,7 +21,7 @@ export const CartProvider = function({children}){
 		}
 	}
 
-return <CartContext.Provider value={{items, addToCart, removeItem}}>
+return <CartContext.Provider value={{items, setItems, addToCart, removeItem}}>
 {children}
 </CartContext.Provider>
 }

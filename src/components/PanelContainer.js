@@ -1,13 +1,17 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import ItemCount from './ItemCount.js';
 import BuyButton from './BuyButton.js';
 
-const PanelContainer = function({name, productId, max, min, initial, text, onAdd}){
-	const [quantity, setQuantity] = useState(initial);
+const PanelContainer = function({name, productId, max, min, initial, text, onAdd, price}){
+	const [quantity, setQuantity] = useState(null);
 
 	const getQuantity = function(counter){
 		setQuantity(counter);
 	}
+
+	useEffect(() => {
+		setQuantity(initial);
+	}, [initial])
 	
 	return <>
 		<ItemCount 
@@ -22,6 +26,7 @@ const PanelContainer = function({name, productId, max, min, initial, text, onAdd
 			quantity={quantity}
 			productId={productId}  
 			name={name}
+			price={price}
 			/>
 	</>
 }
